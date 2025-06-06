@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Almuerzo - GlucoSim NIR</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      background: #f9f9f9;
+    }
+    h2 {
+      text-align: center;
+    }
+    label, select, button {
+      display: block;
+      width: 100%;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 25px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #result {
+      margin-top: 25px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+    #sprintMessage {
+      display: none;
+      margin-top: 20px;
+      padding: 14px;
+      background-color: #e8f4fd;
+      border: 1px solid #90caff;
+      border-radius: 8px;
+      color: #004085;
+      font-weight: 600;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Selecciona tus alimentos del almuerzo</h2>
+
+  <label for="food">Elige un alimento:</label>
+  <select id="food">
+    <option value="">-- Selecciona un alimento --</option>
+    <option value="arroz">Arroz</option>
+    <option value="pollo">Pollo</option>
+    <option value="carne">Carne</option>
+    <option value="ensalada">Ensalada</option>
+    <option value="papa">Papa</option>
+    <option value="frijoles">Frijoles</option>
+    <option value="sopa">Sopa</option>
+    <option value="jugos">Jugos naturales</option>
+    <option value="pan">Pan</option>
+    <option value="postre">Postre</option>
+  </select>
+
+  <button onclick="estimateGlucose()">Calcular nivel estimado de glucosa</button>
+
+  <div id="result">Nivel de glucosa estimado: -- mg/dL</div>
+
+  <!-- Mensaje KOZY -->
+  <div id="sprintMessage">
+    🧪 ¿Quieres conocer tu nivel real de glucosa? <br>
+    Conecta tu <strong>glucómetro KOZY</strong> al computador y obtén una lectura precisa, confiable y en tiempo real.
+  </div>
+
+  <!-- Botón Aprende Más -->
+  <button id="learnMoreBtn">Aprende más</button>
+
+  <script>
+    // Recuperamos datos guardados
+    const user = JSON.parse(localStorage.getItem('glucoUser'));
+
+    const foodImpact = {
+      arroz: 25,
+      pollo: 5,
+      carne: 5,
+      ensalada: 3,
+      papa: 20,
+      frijoles: 15,
+      sopa: 10,
+      jugos: 18,
+      pan: 22,
+      postre: 30
+    };
+
+    function estimateGlucose() {
+      const food = document.getElementById('food').value;
+      if (!food) {
+        alert("Por favor, selecciona un alimento.");
+        return;
+      }
+
+      let baseGlucose = 80;
+
+      if (user) {
+        baseGlucose += (user.age - 30) * 0.5;
+        baseGlucose += (user.weight - 70) * 0.3;
+
+        if(user.gender === "Masculino") baseGlucose += 5;
+        else if(user.gender === "Femenino") baseGlucose -= 3;
+      }
+
+      const totalGlucose = Math.round(baseGlucose + foodImpact[food]);
+      document.getElementById('result').innerText = `Nivel de glucosa estimado: ${totalGlucose} mg/dL`;
+
+      // Mostrar el mensaje de KOZY
+      document.getElementById('sprintMessage').style.display = 'block';
+    }
+
+    document.getElementById('learnMoreBtn').addEventListener('click', () => {
+      window.location.href = 'aprende.html';
+    });
+  </script>
+
+</body>
+</html>

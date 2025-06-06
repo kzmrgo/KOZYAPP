@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlucoSim NIR</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f3f7;
+      padding: 20px;
+      text-align: center;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-bottom: 5px;
+    }
+    select, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1e7e34;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2 id="welcome">Bienvenido a GlucoSim NIR</h2>
+  <p>Simulación personalizada de glucosa basada en tu última comida.</p>
+
+  <label for="meal">Selecciona tu última comida:</label>
+  <select id="meal">
+    <option value="">-- Elige una opción --</option>
+    <option value="ayuno">Ayuno</option>
+    <option value="desayuno">Desayuno</option>
+    <option value="almuerzo">Almuerzo</option>
+    <option value="cena">Cena</option>
+    <option value="merienda">Merienda</option>
+  </select>
+
+  <button onclick="redirect()">Continuar</button>
+</div>
+
+<script>
+  const user = JSON.parse(localStorage.getItem('glucoUser'));
+  const welcome = document.getElementById('welcome');
+  if (user && user.name) {
+    welcome.innerText = `Hola ${user.name}, bienvenido a GlucoSim NIR`;
+  }
+
+  function redirect() {
+    const meal = document.getElementById('meal').value;
+    if (!meal) {
+      alert("Por favor, selecciona una opción.");
+      return;
+    }
+
+    // Define redirecciones según la comida seleccionada
+    switch(meal) {
+      case 'ayuno':
+        // Aquí haces la estimación en la misma página o rediriges a una página específica si quieres
+        window.location.href = "ayuno.html";
+        break;
+      case 'desayuno':
+        window.location.href = "desayuno.html";
+        break;
+      case 'almuerzo':
+        window.location.href = "almuerzo.html";
+        break;
+      case 'cena':
+        window.location.href = "cena.html";
+        break;
+      case 'merienda':
+        window.location.href = "merienda.html";
+        break;
+      default:
+        alert("Opción no válida.");
+    }
+  }
+</script>
+<button id="learnMoreBtn">Aprende más</button>
+
+<script>
+  document.getElementById('learnMoreBtn').addEventListener('click', () => {
+    window.location.href = 'aprende.html';
+  });
+</script>
+
+</body>
+</html>
